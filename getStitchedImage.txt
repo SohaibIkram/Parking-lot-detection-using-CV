@@ -1,0 +1,38 @@
+import cv2
+from sys import exit
+
+def getStitchedImage(image_paths):    
+    # initialized a list of images
+    imgs = []
+
+    for i in range(len(image_paths)):
+        imgs.append(cv2.imread(image_paths[i]))
+        #imgs[i]=cv2.resize(imgs[i],(0,0),fx=0.4,fy=0.4)
+        # this is optional if your input images isn't too large
+        # you don't need to scale down the image
+        # in my case the input images are of dimensions 3000x1200
+        # and due to this the resultant image won't fit the screen
+        # scaling down the images
+    # showing the original pictures
+    cv2.imshow('Image 1',imgs[0])
+    cv2.waitKey(0)
+
+    cv2.imshow('Image 2',imgs[1])
+    cv2.waitKey(0)
+
+    stitchy=cv2.Stitcher.create()
+    (dummy,output)=stitchy.stitch(imgs)
+
+    if dummy != cv2.STITCHER_OK:
+    # checking if the stitching procedure is successful
+    # .stitch() function returns a true value if stitching is
+    # done successfully
+        print("Stitching ain't successful")
+        exit(1)
+    else:
+        cv2.imshow('Stitched Image',output)
+        cv2.waitKey(0)
+        return output
+
+    cv2.destroyAllWindows()
+    
